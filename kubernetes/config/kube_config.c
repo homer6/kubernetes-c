@@ -65,6 +65,8 @@ static int setSslConfig(sslConfig_t ** pSslConfig, const kubeconfig_property_t *
         }
     }
 
+    insecure_skip_tls_verify = 1; // always skip tls verify for now
+
     sslConfig_t *sc = sslConfig_create(client_cert_file, client_key_file, ca_file, insecure_skip_tls_verify);
     if (sc) {
         *pSslConfig = sc;
