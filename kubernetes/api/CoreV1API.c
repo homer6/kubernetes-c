@@ -37945,7 +37945,7 @@ CoreV1API_readNamespacedPodLog(apiClient_t *apiClient, char *name, char *_namesp
         keyPairQuery_timestamps = keyValuePair_create(keyQuery_timestamps, valueQuery_timestamps);
         list_addElement(localVarQueryParameters,keyPairQuery_timestamps);
     }
-    list_addElement(localVarHeaderType,"text/plain"); //produces
+    //list_addElement(localVarHeaderType,"text/plain"); //produces  removed text/plain as it is rejected
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/yaml"); //produces
     list_addElement(localVarHeaderType,"application/vnd.kubernetes.protobuf"); //produces
@@ -37971,10 +37971,10 @@ CoreV1API_readNamespacedPodLog(apiClient_t *apiClient, char *name, char *_namesp
     //}
     //primitive return type simple string
     char* elementToReturn = NULL;
-    if(apiClient->response_code >= 200 && apiClient->response_code < 300)
-        elementToReturn = strdup((char*)apiClient->dataReceived);
 
     if (apiClient->dataReceived) {
+        // moved strdup inside the guard to prevent segfaults on NULL dataReceived
+        elementToReturn = strdup((char*)apiClient->dataReceived);
         free(apiClient->dataReceived);
         apiClient->dataReceived = NULL;
         apiClient->dataReceivedLen = 0;
